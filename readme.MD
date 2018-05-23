@@ -8,16 +8,16 @@ Currently in development stages. Coming to PyPi soon....
 
 - Retrieve a page based on the affix of the wikipedia url
 
-    page = wikipedia.WikiPage("Python_(Programming_Language)")
+    > page = wikipedia.WikiPage("Python_(Programming_Language)")
 
 - Return title of page
 
-    page.title -> 'Python (programming language)'
+    > page.title -> 'Python (programming language)'
 
 - Return content by paragraphs
 
-    page.paragraphs[:3] -> ['Python is ...',' ... ', ...
+    > page.paragraphs[:3] -> ['Python is ...',' ... ', ...
 
 - Return contents of page in zipped form
 
-    page.contents -> [('1', 'History'), ('2', 'Features and philosophy'), ('3',...
+    > page.contents -> [('1', 'History'), ('2', 'Features and philosophy'), ('3',...
