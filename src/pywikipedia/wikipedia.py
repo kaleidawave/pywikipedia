@@ -15,6 +15,7 @@ class WikiPage():
     def run(self, html):
         #sets all class variables up 
 
+        #retrives title (Done)
         self.title = html.select("#firstHeading")[0].text
 
         #main content section
@@ -26,10 +27,26 @@ class WikiPage():
             rawcontents.append(element.text)
         self.contents = list(zip(rawcontents[::2], rawcontents[1::2],)) 
 
-        #paragraphs
+        #paragraphs (Done)
         self.paragraphs = list()
         for element in content.select('p'):
             self.paragraphs.append(element.text) #may added regex to fix refence numbers being added
+
+        #summary box (Not Done)
+        try: infobox = html.select('#mw-content-text > div > table.infobox') #some vevent others vcard
+        if infobox[0] is None:
+            self.info = False
+        else:
+            self.info = True
+            self.infobox = list()
+            for row in infobox[0].find_all('tr'):
+                rowlist = list()
+                try: rowlist.append(row.find('th').text)
+                except: rowlist.append("")
+                for column in row.find_all('td'):
+                    rowlist.append(column.text)
+                    
+                self.infobox.append(rowlist)     
 
         #future variables
         self.tables = None
