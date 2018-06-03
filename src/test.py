@@ -1,16 +1,13 @@
 from pywikipedia import wikipedia
 from tabulate import tabulate
 
-#page = wikipedia.WikiPage("Python (Programming Language)") #argument is the last part of wikipedia URL - will fixed underscored later
+wikipedia.date_as_string = True
 
-page = wikipedia.search("Train")
+page = wikipedia.random()
 
-#print(page.title) # prints title
-#print(page.lastedited.strftime("%Y-%m-%d %H:%M")) #prints time of last edit as datetime object
-#print(page.tables) # prints list of tuples -> (contentnum, contenettitle)
-#print(page.paragraphs[:3]) #prints first 3 paragraphs
-#print(tabulate(page.infobox)) #prints first 3 paragraphs
+print(page.title)
+print(page.lastedited) 
+#print(page.paragraphs[:3])
+#print(page.contents[0])
 
-#print(page.section('Politics'))
-
-print("Done") #testing for finish
+#print(page.section(page.contents[0]))

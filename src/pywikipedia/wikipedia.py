@@ -13,7 +13,7 @@ def search(query):
 
 def today():
     todaydate = datetime.now().strftime('%B_%d')
-    return WikiPage(todaydate)
+    return WikiPage("https://en.wikipedia.org/wiki/" + todaydate)
     
 def random(): #not sure if works 100% of the time
     return WikiPage("https://en.wikipedia.org/wiki/Special:Random")
@@ -68,55 +68,65 @@ class WikiPage():
         for element in content.select('p'):
             self.paragraphs.append(element.text) #may added regex to fix refence numbers being added
 
-        #summary box (Not Done)
-        infobox = html.select('#mw-content-text > div > table.infobox') #some vevent others vcard
-        if len(infobox) == 0:
-            self.info = False
-        else:
-            self.info = True
-            self.infobox = list()
-            for row in infobox[0].find_all('tr'):
-                rowlist = list()
-                try: rowlist.append(row.find('th').text)
-                except: rowlist.append("")
-                for column in row.find_all('td'):
-                    rowlist.append(column.text)
+        #summary box (Not Done) Gonna leave this to a later release
+
+        # infobox = html.select('#mw-content-text > div > table.infobox') #some vevent others vcard
+        # if len(infobox) == 0:
+        #     self.info = False
+        # else:
+        #     self.info = True
+        #     self.infobox = list()
+        #     for row in infobox[0].find_all('tr'):
+        #         rowlist = list()
+        #         try: rowlist.append(row.find('th').text)
+        #         except: rowlist.append("")
+        #         for column in row.find_all('td'):
+        #             rowlist.append(column.text)
                     
-                self.infobox.append(rowlist)     
+        #         self.infobox.append(rowlist)     
 
-        #finds tables
-        self.tables = list()
-        tables_titles = html.select('th.navbox-title')
-        for table in tables_titles:
-            self.tables.append(table.get_text(separator=' ').strip())   
+        #finds tables ALSO LEAVING TO LATER RELEASE
+
+        # self.tables = list()
+        # tables_titles = html.select('th.navbox-title')
+        # for table in tables_titles:
+        #     self.tables.append(table.get_text(separator=' ').strip())   
         
-        #images 
-        self.images = list()
-        images = html.select('img')
-        for image in images:
-            self.images.append(image['src'])
 
-        self.sections = None
+        #images ALSO LEAVING TO LATER RELEASE
+        # self.images = list()
+        # images = html.select('img')
+        # for image in images:
+        #     self.images.append(image['src'])
+
+        #self.sections = None
+        #self.haspanel = None
         
-        self.lastedited = wikitodatetime(html.select('#footer-info-lastmod')[0].text)
-        self.haspanel = None
-
-    #future methods 
-    def table(self, table):
-        pass
-        #return tables[table]
+        global date_as_string
+        if date_as_string: self.lastedited = html.select('#footer-info-lastmod')[0].text[1:]
+        else: self.lastedited = utils.wikitodatetime(html.select('#footer-info-lastmod')[0].text)
     
-    def section(self, section):
+    #future methods 
+    # def table(self, table):
+    #     pass
+    #     #return tables[table]
+    
+    def section(self, section, include_header = True):
         if self.hascontents:
             lists = list(zip(*self.contents))
-            if isinstance(section, (float, int)): selectionindex = list(lists[0]).index(section)
-            else: selectionindex = list(lists[1]).index(section)
+            try:
+                if isinstance(section, (float, int)): selectionindex = list(lists[0]).index(section)
+                elif isinstance(section, str): selectionindex = list(lists[1]).index(section)
+                else: selectionindex = self.contents.index(section)
+            except:
+                print("Section does not exist on page")
+                return "Section does not exist on page"
 
             title = self.html.find(id=(lists[1][selectionindex]))
             nexttitle = title.find_next('h1')
 
             section_paragraphs = list()
-
+            if include_header: section_paragraphs.append(title.text)
             for tag in title.find_all_next():
                 if tag.name is 'p':
                     section_paragraphs.append(tag.text)
@@ -125,20 +135,22 @@ class WikiPage():
 
             return section_paragraphs
 
-    def image(self, image):
-        pass
-        #return images[images].url()
+    # def image(self, image):
+    #     pass
+    #     #return images[images].url()
 
 # Helper Functions 
 
-months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-def wikitodatetime(text):
-    components = replace(text[29:], '.,:', ' ').split(' ')
-    month = months.index(components[2]) + 1
-    return datetime(int(components[3]), month, int(components[1]), int(components[6]), int(components[7]))
+class utils:
+    @staticmethod
+    def wikitodatetime(text):
+        components = utils.replace(text[29:], '.,:', ' ').split(' ')
+        month = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].index(components[2]) + 1
+        return datetime(int(components[3]), month, int(components[1]), int(components[6]), int(components[7]))
 
-#BETTER IMPLEMENTATION OF REPLACE BY KALEIDAGRAPH
-def replace(string ,old, new):
-    for oldchar in old:
-        string = string.replace(oldchar, new)
-    return string
+    #BETTER IMPLEMENTATION OF REPLACE BY KALEIDAGRAPH
+    @staticmethod
+    def replace(string ,old, new):
+        for oldchar in old:
+            string = string.replace(oldchar, new)
+        return string

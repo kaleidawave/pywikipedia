@@ -4,20 +4,68 @@ I was annoyed how many python wikipedia packages there are. They all have a lot 
 
 Currently in development stages. Coming to PyPi soon....
 
+Source can be found in the src folder
+
 ## Current features:
 
-- Retrieve a page based on the affix of the wikipedia url
+First import the package:
 
-    > page = wikipedia.WikiPage("Python_(Programming_Language)")
+    from pywikipedia import wikipedia
+
+- Retrieve a page from wikipedia:
+
+	Through google search:
+
+       page = wikipedia.search("Python code")
+	   
+	Or picking a random page:
+	
+	   page = wikipedia.random()
+	   
+	Or picking the page featured on the main page:
+	
+	   page = wikipedia.featured()
+	   
+	Or finally, picking the page associated with today:
+	
+	   page = wikipedia.today()
 
 - Return title of page
 
-    > page.title -> 'Python (programming language)'
+       page.title -> 'Python (programming language)'
 
 - Return content by paragraphs
 
-    > page.paragraphs[:3] -> ['Python is ...',' ... ', ...
+       page.paragraphs[:3] -> ['Python is ...',' ... ', ...
 
 - Return contents of page in zipped form
 
-    > page.contents -> [('1', 'History'), ('2', 'Features and philosophy'), ('3',...
+       page.contents -> [('1', 'History'), ('2', 'Features and philosophy'), ('3',...
+
+- Sections can then be found from the page
+
+       page.section(1) -> ["History", "Python was con...]..
+
+    or
+
+       page.section("History") -> ["History", "Python was con...]..
+
+    or finally
+
+       page.section(('1', 'History')) -> ["History", "Python was con...]..
+
+    there is also an optional argument that when set to false doesn't include the section heading
+
+- Find the date of the last edit
+
+       page.lastedited -> <Datetime object.....>
+
+    optionally setting `wikipedia.date_as_string = True` will return a string rather than datetime:
+
+       This page was last edited on 1 January 2018, at 22:13.
+
+## About
+
+This package works in `python 3.6.2`  and requries `beautfulsoup 4.6` and `requests 2.11` (both should be installed during pip installation)
+
+Any issues recieved please post to the issues tab on github, thanks :)
