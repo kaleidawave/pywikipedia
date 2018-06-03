@@ -1,14 +1,20 @@
+Download now using pip!! `pip install pywikipedia`
+
 # Wikipedia Python Package
 
 I was annoyed how many python wikipedia packages there are. They all have a lot of users but all are undermaintained, underdocumented and broken. I want to change this by implementing a package which has all the functionality of various packages while also being up to date and active.
 
-Currently in development stages. Coming to PyPi soon....
+Currently in development stages
 
 Source can be found in the src folder
 
-## Current features:
+## Using pywikipedia:
 
-First import the package:
+First download using pip 
+
+    pip install pywikipeida
+
+And import the package:
 
     from pywikipedia import wikipedia
 
@@ -66,6 +72,6 @@ First import the package:
 
 ## About
 
-This package works in `python 3.6.2`  and requries `beautfulsoup 4.6` and `requests 2.11` (both should be installed during pip installation)
+This package works in `python 3.6.2`  and requries `beautfulsoup 4.6`, `lxml` and `requests 2.11` (all should be installed during pip installation)
 
 Any issues recieved please post to the issues tab on github, thanks :)
