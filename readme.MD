@@ -12,7 +12,7 @@ Source can be found in the src folder
 
 First download using pip 
 
-    pip install pywikipeida
+    pip install pywikipedia
 
 And import the package:
 
